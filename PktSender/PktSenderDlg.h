@@ -24,7 +24,7 @@ public:
 // 实现
 protected:
 	HICON m_hIcon;
-
+	CString m_szFileName;
 	// 生成的消息映射函数
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
@@ -32,4 +32,5 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	CEdit m_editPath;
+	afx_msg void OnBnClickedBtOpen();
 };

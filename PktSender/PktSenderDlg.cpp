@@ -32,6 +32,7 @@ void CPktSenderDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CPktSenderDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BT_OPEN, &CPktSenderDlg::OnBnClickedBtOpen)
 END_MESSAGE_MAP()
 
 
@@ -87,3 +88,25 @@ HCURSOR CPktSenderDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void CPktSenderDlg::OnBnClickedBtOpen()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CFileDialog dlg(
+		TRUE, NULL, NULL,
+		OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+		(L"离线报文(*.pcap;*.cap)|*.PCAP;*.CAP|所有文件(*.*)|*.*||"));
+
+	if (dlg.DoModal() == IDOK)
+	{
+		m_szFileName = dlg.GetPathName();
+		m_editPath.SetWindowText(m_szFileName);
+	}
+	else
+	{
+		/* 清除字符串 */
+		m_szFileName.Delete(0, m_szFileName.GetLength());
+		m_editPath.SetWindowText(m_szFileName);
+	}
+}
