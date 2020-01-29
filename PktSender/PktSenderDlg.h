@@ -35,4 +35,8 @@ public:
 	CEdit m_editPath;
 	afx_msg void OnBnClickedBtOpen();
 
+	afx_msg void OnBnClickedCheckOntop();
+	afx_msg void OnSelchangeComboSendmode();
+	// 用于设置发送次数或发送包数
+	CEdit m_editPktNum;
 };
