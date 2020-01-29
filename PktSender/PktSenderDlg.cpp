@@ -7,6 +7,8 @@
 #include "PktSender.h"
 #include "PktSenderDlg.h"
 #include "afxdialogex.h"
+#include "PcapDataInfo.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -100,13 +102,13 @@ void CPktSenderDlg::OnBnClickedBtOpen()
 
 	if (dlg.DoModal() == IDOK)
 	{
-		m_szFileName = dlg.GetPathName();
-		m_editPath.SetWindowText(m_szFileName);
+		m_CDataInfo.setPath(dlg.GetPathName());
+		m_editPath.SetWindowText(m_CDataInfo.getPath());
 	}
 	else
 	{
 		/* 清除字符串 */
-		m_szFileName.Delete(0, m_szFileName.GetLength());
-		m_editPath.SetWindowText(m_szFileName);
+		m_CDataInfo.ClnPath();
+		m_editPath.SetWindowText(m_CDataInfo.getPath());
 	}
 }

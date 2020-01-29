@@ -3,7 +3,7 @@
 //
 
 #pragma once
-
+#include "PcapDataInfo.h"
 
 // CPktSenderDlg 对话框
 class CPktSenderDlg : public CDialogEx
@@ -17,14 +17,15 @@ public:
 	enum { IDD = IDD_PKTSENDER_DIALOG };
 #endif
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
 
 
 // 实现
 protected:
 	HICON m_hIcon;
-	CString m_szFileName;
+	PcapDataInfo m_CDataInfo;
+
 	// 生成的消息映射函数
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
@@ -33,4 +34,5 @@ protected:
 public:
 	CEdit m_editPath;
 	afx_msg void OnBnClickedBtOpen();
+
 };
