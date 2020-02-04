@@ -11,7 +11,8 @@ typedef enum {
 	SendStart,
 	SendStop,
 	SendPause,
-	SendEnd
+	SendEnd,
+	SendInvalid
 }SendStatEnum;
 
 class PcapDataInfo

@@ -5,6 +5,7 @@
 #pragma once
 #include "PcapDataInfo.h"
 
+
 // CPktSenderDlg 对话框
 class CPktSenderDlg : public CDialogEx
 {
@@ -20,6 +21,8 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
 
+private:
+	BOOL m_bIsSend;
 
 // 实现
 protected:
@@ -39,4 +42,5 @@ public:
 	afx_msg void OnSelchangeComboSendmode();
 	// 用于设置发送次数或发送包数
 	CEdit m_editPktNum;
+	afx_msg void OnBnClickedBtSend();
 };

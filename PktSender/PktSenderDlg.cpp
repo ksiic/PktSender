@@ -18,11 +18,11 @@
 // CPktSenderDlg 对话框
 
 
-
 CPktSenderDlg::CPktSenderDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_PKTSENDER_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	m_bIsSend = FALSE;
 }
 
 void CPktSenderDlg::DoDataExchange(CDataExchange* pDX)
@@ -38,6 +38,7 @@ BEGIN_MESSAGE_MAP(CPktSenderDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BT_OPEN, &CPktSenderDlg::OnBnClickedBtOpen)
 	ON_BN_CLICKED(IDC_CHECK_ONTOP, &CPktSenderDlg::OnBnClickedCheckOntop)
 	ON_CBN_SELCHANGE(IDC_COMBO_SENDMODE, &CPktSenderDlg::OnSelchangeComboSendmode)
+	ON_BN_CLICKED(IDC_BT_SEND, &CPktSenderDlg::OnBnClickedBtSend)
 END_MESSAGE_MAP()
 
 
@@ -53,9 +54,15 @@ BOOL CPktSenderDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+	//数据初始化
+	m_CDataInfo.setSendStat(SendInvalid);
+	m_CDataInfo.setSendMode(LoopPktSend);
 
-	// 初始化控件状态
+
+	// 更新控件状态
 	((CButton*)GetDlgItem(IDC_CHECK_ONTOP))->SetCheck(0);		/* 置顶选框为FALSE */
+
+	((CButton*)GetDlgItem(IDC_BT_SEND))->EnableWindow(FALSE);	/* 发送按钮不可点击 */
 	((CButton*)GetDlgItem(IDC_BT_RESEND))->EnableWindow(FALSE);	/* 重发按钮不可点击 */
 	((CButton*)GetDlgItem(IDC_BT_STOP))->EnableWindow(FALSE);	/* 停止按钮不可点击 */
 
@@ -102,7 +109,6 @@ HCURSOR CPktSenderDlg::OnQueryDragIcon()
 }
 
 
-
 void CPktSenderDlg::OnBnClickedBtOpen()
 {
 	// TODO: 在此添加控件通知处理程序代码
@@ -115,12 +121,18 @@ void CPktSenderDlg::OnBnClickedBtOpen()
 	{
 		m_CDataInfo.setPath(dlg.GetPathName());
 		m_editPath.SetWindowText(m_CDataInfo.getPath());
+		((CButton*)GetDlgItem(IDC_BT_SEND))->EnableWindow();	/* 发送按钮可点击 */
 	}
 	else
 	{
 		/* 清除字符串 */
 		m_CDataInfo.ClnPath();
 		m_editPath.SetWindowText(m_CDataInfo.getPath());
+
+		m_bIsSend = FALSE;
+		((CButton*)GetDlgItem(IDC_BT_SEND))->EnableWindow(FALSE);	/* 发送按钮不可点击 */
+		((CButton*)GetDlgItem(IDC_BT_RESEND))->EnableWindow(FALSE);	/* 重发按钮不可点击 */
+		((CButton*)GetDlgItem(IDC_BT_STOP))->EnableWindow(FALSE);	/* 停止按钮不可点击 */
 	}
 	
 	
@@ -145,8 +157,12 @@ void CPktSenderDlg::OnBnClickedCheckOntop()
 void CPktSenderDlg::OnSelchangeComboSendmode()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	//循环发送;单包发送;多包发送;
 	int index = ((CComboBox*)GetDlgItem(IDC_COMBO_SENDMODE))->GetCurSel();
-	if (0 == index)
+	CString strTest;
+	((CComboBox*)GetDlgItem(IDC_COMBO_SENDMODE))->GetLBText(index, strTest);
+	//if (0 == index)
+	if(!strTest.Compare(L"循环发送"))
 	{
 		/* 设置 IDC_STATIC_TIMES 标签为"次数" */
 		((CStatic*)GetDlgItem(IDC_STATIC_TIMES))->SetWindowText(L"次数");
@@ -158,7 +174,8 @@ void CPktSenderDlg::OnSelchangeComboSendmode()
 		}
 		m_editPktNum.SetWindowText(L"1");
 	}
-	else if (1 == index)
+	//else if (1 == index)
+	else if (!strTest.Compare(L"单包发送"))
 	{
 		/* 设置 IDC_EDIT_PKTNUM 循环发送次数为空，且控件不可用 */
 		if (m_editPktNum.IsWindowEnabled())
@@ -167,7 +184,8 @@ void CPktSenderDlg::OnSelchangeComboSendmode()
 		}
 		m_editPktNum.SetWindowText(L"");
 	}
-	else if (2 == index)
+	//else if (2 == index)
+	else if (!strTest.Compare(L"多包发送"))
 	{
 		/* 设置 IDC_STATIC_TIMES 标签为"次数" */
 		((CStatic*)GetDlgItem(IDC_STATIC_TIMES))->SetWindowText(L"包数");
@@ -192,4 +210,14 @@ void CPktSenderDlg::OnSelchangeComboSendmode()
 		m_editPktNum.SetWindowText(L"");
 		AfxMessageBox(L"slect err.");
 	}
+}
+
+
+void CPktSenderDlg::OnBnClickedBtSend()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	//SendStatEnum enStat;
+	m_bIsSend = TRUE;
+	//enStat = m_CDataInfo.getSendStat();
+
 }
